@@ -1,11 +1,24 @@
 "use client";
 import { SearchParamsContext } from "@/context/search-params-context";
 import { useContext, type FC, type FormEvent } from "react";
+import { toast } from "react-hot-toast";
 
 const UserForm: FC = () => {
   const { setSearch } = useContext(SearchParamsContext);
   const handleOnSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
+    const { search } = event.currentTarget;
+    if (!search.value) return;
+
+    if (search.value.length < 4) {
+      toast.error("Please enter at least 4 characters");
+      return;
+    }
+    if (search.value === "doublevpartners") {
+      toast.error("you can not search this word");
+      return;
+    }
+
     setSearch(event.currentTarget.search.value);
   };
 
