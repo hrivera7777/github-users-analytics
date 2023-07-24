@@ -21,6 +21,13 @@ export interface User {
   site_admin: boolean;
   starred_at?: string;
   score: number;
+  bio?: string;
+  followers: number;
+  following?: number;
+  created_at?: string;
+  location?: string;
+  public_repos?: number;
+  public_gists?: number;
 }
 
 export interface SearchUsersResponse {
