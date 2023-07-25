@@ -13,10 +13,6 @@ const SearchUsers: FC = () => {
   const isRequiredCondition =
     search.length >= 4 || search !== "doublevpartners";
 
-  if (isRequiredCondition) {
-    return <span> No users found</span>;
-  }
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ["users", search],
     refetchOnWindowFocus: false,

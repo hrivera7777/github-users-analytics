@@ -1,6 +1,9 @@
 import { SearchUsersResponse, User } from "@/types";
 
-const baseUrl = "https://api.github.com";
+const githubUrl =
+  process.env.NEXT_PUBLIC_GITHUB_API_URL ?? "https://api.github.com";
+
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost";
 
 export const searchUsers = async (
   searchParam: string,
@@ -8,7 +11,7 @@ export const searchUsers = async (
   const totalUsersPerPage = 10;
 
   const result = await fetch(
-    `${baseUrl}/search/users?q=${searchParam}&per_page=${totalUsersPerPage}`,
+    `${githubUrl}/search/users?q=${searchParam}&per_page=${totalUsersPerPage}`,
     {
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
@@ -41,9 +44,36 @@ export const searchUsers = async (
 };
 
 export const userDetails = async (slug: string): Promise<User> => {
-  const result = await fetch(`${baseUrl}/users/${slug}`, {
+  const result = await fetch(`${githubUrl}/users/${slug}`, {
     headers: {
       "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  if (!result.ok) {
+    throw new Error("Error fetching data");
+  }
+  return result.json();
+};
+
+export const exportUser = async (user: User): Promise<User> => {
+  const result = await fetch(`${backendUrl}/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+  if (!result.ok) {
+    throw new Error("Error saving data");
+  }
+  return result.json();
+};
+
+export const storedUsers = async (): Promise<User[]> => {
+  const result = await fetch(`${backendUrl}/users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
   });
   if (!result.ok) {

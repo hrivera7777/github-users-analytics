@@ -18,7 +18,6 @@ const UserForm: FC = () => {
       toast.error("you can not search this word");
       return;
     }
-
     setSearch(event.currentTarget.search.value);
   };
 
